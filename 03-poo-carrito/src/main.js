@@ -1,108 +1,83 @@
-// // 1.- Crear una clase para modelar un sistema de usuarios que puedan iniciar sesión y cerrar sesión.
-// // y actulizar su perfil.
-// // --------- SOLUCION CON FUNCIONES CONSTRUCTURAS ------------
+import { Carrito } from "./components/Carrito.js";
 
-import { Producto } from "./components/Producto";
+const carrito = new Carrito();
+// cargamos los datos del localStorage al carrito.
+carrito.cargarLocalStorage();
 
-// function Usuario(nombre, email, password) {
-//   this.nombre = nombre; // variables de instancia publicas
-//   this.email = email;
-//   let _password = password; // variable de instancia privada
-//   // ------ metodos publicos
-//   this.login = function (email, password) {
-//     // no usar arrow function a no ser que dominemos el contexto de this
-//     // quiero evaluar si email y password son correctos
-//     if (this.email === email && _password === password) {
-//       return `Bienvenido ${this.nombre}`;
-//     }
-//     return "Email o password incorrectos";
-//   };
+// Seleccionar APP
+function pintarInterfazWeb() {
+    const app = document.getElementById("app");
 
-//   this.updateEmail = function (newEmail) {
-//     this.email = newEmail;
-//     return `Email actualizado a ${this.email}`;
-//   };
-// }
+    // Funciones
+    function pintarCarrito() {
+        const lista = document.getElementById("lista-products");
+        lista.innerHTML = carrito.productos
+            .map(
+                (producto, index) => `
+        <li data-id="${index}">${producto.obtenerInfo()}
+        <button class="btn-editar" data-id="${index}">Editar</button>
+        <button class="btn-borrar" data-id="${index}">Borrar</button>
+        </li>
+      `
+            )
+            .join("");
+        // Calcular el Total
+    }
 
-// // Crear un usuario
-// const usuario1 = new Usuario("Juan", "juan@gmail.com", "123456");
+    const handlerSubmitForm = (event) => {
+        event.preventDefault();
+        const nombre = document.getElementById("nombre-product").value.trim();
+        const cantidad = Number(
+            document.querySelector("#cantidad-product").value
+        );
+        const precio = Number(document.querySelector("#precio-product").value);
 
-// // --------- Lo mostramos en el dom ------
-// const app = document.getElementById("app");
+        // validaciones del folmulario básicas
+        if (!nombre || cantidad < 0 || precio < 0) {
+            alert("Debes insertar valores correctos");
+            return;
+        }
 
-// function renderUsuario() {
-//   // función que pinta en el app el usuario
-//   app.innerHTML = `
-//     <h2>Usuario: ${usuario1.nombre}</h2>
-//     <p>Email: ${usuario1.email}</p>
-//     <button id="btnLogin">Login</button>
-//   `;
+        // Añadimos el nombre, cantidad y precio a un producto del carrito
+        carrito.addProduct(nombre, cantidad, precio);
+        // Ahora pintamos el carrito
+        pintarCarrito();
+    };
 
-//   // añadir evento al boton
-//   const btnLogin = document.getElementById("btnLogin");
-//   btnLogin.addEventListener("click", () => {
-//     alert(usuario1.login("pepe@gmail.com","123456"));
-//   });
-// }
+    const opcionesProducto = (event) => {
+        // target es el componente donde he hecho CLICK o lo que sea
+        const index = Number(event.target.dataset.id);
+        if (event.target.classList.contains("btn-borrar")) {
+          carrito.borrarProducto(index);
+          pintarCarrito();
+        }
 
-// // --------- SOLUCION CON CLASES ------------
-// class UsuarioClases {
-//   // las variables privadas se declaran anteponeindo # al nombre
-//   #password;
+        if (event.target.classList.contains("btn-editar")) {
+          // carrito.editarProducto(index);
+          alert("Voy a editar");
+          pintarCarrito();
+        }
+    };
 
-//   constructor(nombre, email, password) {
-//     this.nombre = nombre;
-//     this.email = email;
-//     this.#password = password;
-//   }
+    app.innerHTML = `
+      <h1>Carrito de la compra</h1>
+      <form id="form-product">
+        <input type="text" id="nombre-product" placeholder="Nombre del producto">
+        <input type="number" id="cantidad-product" placeholder="Cantidad">
+        <input type="number" id="precio-product" placeholder="Precio">
+        <button type="submit">Añadir producto</button>
+      </form>
 
-//   login(email, password) {
-//     if (this.email === email && this.#password === password) {
-//       return `Bienvenido ${this.nombre}`;
-//     }
-//     return "Email o password incorrectos";
-//   }
+      <h2>Productos</h2>
+      <div id="lista-products"></div>
+      `;
 
-//   updateEmail(newEmail) {
-//     this.email = newEmail;
-//     return `Email actualizado a ${this.email}`;
-//   }
-// }
+    document
+        .getElementById("form-product")
+        .addEventListener("submit", handlerSubmitForm);
 
-// const usuario2 = new UsuarioClases("Pepe", "pepe@gmail.com", "123456");
+    document.getElementById("lista-products").addEventListener("click", opcionesProducto);
+}
 
-// ---------------------- PRODUCTO ----------------------
-
-// Array de productos
-const productos = [
-  new Producto("Portatil", 500, 10),
-  new Producto("Movil", 1200, 20),
-  new Producto("Tablet", 300, 5),
-];
-
-// renderizamos los productos
-const app = document.getElementById("app");
-// ${productos
-//   .map((producto) => `<li> ${producto.obtenerInfo()} </li>`)
-//   .join("")}
-
-app.innerHTML = ` 
-  <h2>Gestión de Productos</h2>
-  ${productos
-    .map((producto, index) => {
-      return `<li> 
-          ${producto.obtenerInfo()} 
-          <button class="btn-actualizar-stock" data-index="${index}">Actualizar Stock</button>
-      
-      </li>`;
-    })
-    .join("")}
-`;
-
-// escuchamos el evento click en los botones de actualizar stock
-
-document.querySelectorAll(".btn-actualizar-stock").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    alert("Actualizar stock");
-  });
-});
+// ---------- INICIO DE LA APLICACIÓN ------------
+pintarInterfazWeb();
