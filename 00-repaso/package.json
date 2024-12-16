@@ -1,0 +1,19 @@
+{
+  "name": "00-repaso",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "dev": "vite",
+    "build": "vite build",
+    "json-server": "json-server --watch ./src/data/db.json --port 3500",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.0.1"
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-beta.3"
+  }
+}

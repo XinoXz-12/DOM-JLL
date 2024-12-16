@@ -27,4 +27,8 @@ export class Producto {
         }
         return this.stock + cantidad;
     }
+
+    getProducto() {
+        return `${this.nombre}: ${this.precio} --- Stock: ${this.stock}`;
+    }
 }

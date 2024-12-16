@@ -1,5 +1,4 @@
-// Ejercicio 1
-console.log("--------- Ejercicio 3 ---------");
+//! Ejercicio 1
 import { GestorTareas } from "./helpers/Ejercicio1/GestorTareas";
 
 const gestor = new GestorTareas();
@@ -71,35 +70,68 @@ function generarInterfaz() {
 
 // generarInterfaz();
 
+//! Ejercicio 2
 
-// Ejercicio 3
-import {
-    Empleado,
-    EmpleadoClases,
-    EmpleadoFreelance,
-} from "./helpers/Ejercicio3";
+function handlerAñadirProducto(event) {
+    event.preventDefault();
+    const nombreProducto = document.getElementById("nombre-producto").value.trim();
+    const precioProducto = Number(document.getElementById("precio-producto").value);
+    const stockProducto = Number(document.getElementById("stock-producto").value);
+    if (!nombreProducto || precioProducto < 0 || stockProducto < 0) {
+        alert("Debes introducir valores correctos");
+    }
+    const producto = new ProductoClases(nombreProducto, precioProducto, stockProducto);
+    document.getElementById('divProductos').innerHTML = producto.getProducto();
+}
+
+function ej2() {
+    const app = document.getElementById('app');
+    app.innerHTML = `
+        <h1>Productos</h1>
+        <div class="divForm">
+            <form id="form">
+                <input type="text" placeholder="Nombre del Producto">
+                <input type="number" placeholder="Precio del Producto">
+                <input type="number" placeholder="Stock del Producto">
+                <button type="submit">Añadir Producto</button>
+            </form>
+        </div>
+    `;
+    const divProductos = document.createElement('div');
+    divProductos.id = 'divProductos';
+    app.appendChild(divProductos);
+    
+    document.getElementById('form').
+        addEventListener('submit', handlerAñadirProducto);
+}
+
+ej2();
+
+
+//! Ejercicio 3
+import { Empleado, EmpleadoClases, EmpleadoFreelance } from "./helpers/Ejercicio3";
 
 console.log("--------- Ejercicio 3 ---------");
-const empleado1 = new Empleado("Juan", 25, "junior");
-const empleado2 = new Empleado("Ana", 30, "semiSenior");
-empleado1.info();
-empleado2.info();
+// const empleado1 = new Empleado("Juan", 25, "junior");
+// const empleado2 = new Empleado("Ana", 30, "semiSenior");
+// empleado1.info();
+// empleado2.info();
 
-const freelance = new EmpleadoFreelance("Pedro", 35, 50);
-const freelance2 = new EmpleadoFreelance("Maria", 40, 60);
-freelance.info(44);
-freelance2.info(44);
+// const freelance = new EmpleadoFreelance("Pedro", 35, 50);
+// const freelance2 = new EmpleadoFreelance("Maria", 40, 60);
+// freelance.info(44);
+// freelance2.info(44);
 
-console.log("-------- Ejercicio 3 con clases --------");
-const empleadoClases1 = new EmpleadoClases("Mario", 25, "junior");
-const empleadoClases2 = new EmpleadoClases("Ana María", 30, "semiSenior");
-empleadoClases1.info();
-empleadoClases2.info();
+// console.log("-------- Ejercicio 3 con clases --------");
+// const empleadoClases1 = new EmpleadoClases("Mario", 25, "junior");
+// const empleadoClases2 = new EmpleadoClases("Ana María", 30, "semiSenior");
+// empleadoClases1.info();
+// empleadoClases2.info();
 
-const freelanceClases = new EmpleadoFreelance("Rodolfo", 35, 50);
-const freelanceClases2 = new EmpleadoFreelance("María José", 40, 60);
-freelanceClases.info(44);
-freelanceClases2.info(44);
+// const freelanceClases = new EmpleadoFreelance("Rodolfo", 35, 50);
+// const freelanceClases2 = new EmpleadoFreelance("María José", 40, 60);
+// freelanceClases.info(44);
+// freelanceClases2.info(44);
 
 
 // Ejercicio 7
@@ -108,7 +140,7 @@ import { UsuarioClase, GestionUsuariosClase } from "./helpers/Ejercicio7";
 console.log("--------- Ejercicio 7 ---------");
 
 
-(async function () {
+/*(async function () {
     // Declaración de variables
     const gestorUser = new GestionUsuariosClase();
     await gestorUser.fetchUsuarios();
@@ -180,3 +212,4 @@ console.log("--------- Ejercicio 7 ---------");
         document.querySelector("#form-usuario").
             addEventListener("submit", handlerSubmitBuscar);
 })();
+*/
